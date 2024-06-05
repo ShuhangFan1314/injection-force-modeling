@@ -38,7 +38,7 @@ st.write("[Wu, Linke et al. [Advancing injection force modeling and viscosity-de
 
 # 用户输入
 st.header("输入以下参数以计算注射力:")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns([1, 0.4, 1])  # 第一列宽度为1，第二列宽度为0.4，第三列宽度为1
 
 with col1:
     # 用户输入参数
@@ -59,10 +59,7 @@ with col1:
     force = calculate_injection_force(V, v, n, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
     st.write(f"预测注射力为: {force:.2f} N")
     
-    # 添加一些空白空间
-    st.write("")  # 添加一个空白元素来增加间距
-    
-with col2:
+with col3:
     # 数据模拟与绘图
     st.header("Injection Force vs. Viscosity Simulation")
     
