@@ -78,7 +78,7 @@ if st.checkbox("模拟不同粘度下的注射力"):
     mu_range = np.linspace(mu_start, mu_end, num_points)
     
     # 计算注射力
-    force_range = [calculate_injection_force(V, mu_i, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000) for mu_i in mu_range]
+    force_range = [calculate_injection_force(V, v, n, mu_i, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000) for mu_i in mu_range]
     
     # 拟合数据以展示可能的非线性关系
     popt, _ = curve_fit(exponential_model, mu_range, force_range)
