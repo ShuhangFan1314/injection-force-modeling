@@ -52,7 +52,7 @@ d_oil_mm = st.number_input("The thickness of silicone oil (mm)", min_value=0.0, 
 
 # 计算并显示注射力
 st.header("计算结果")
-force = calculate_injection_force(V, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
+force = calculate_injection_force(V,v,n, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
 st.write(f"预测注射力为: {force:.2f} N")
 
 # 数据模拟与绘图
