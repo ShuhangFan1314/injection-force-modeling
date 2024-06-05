@@ -38,33 +38,29 @@ st.write("[Wu, Linke et al. [Advancing injection force modeling and viscosity-de
 
 # 用户输入
 st.header("输入以下参数以计算注射力:")
-V = st.number_input("The injection rate (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-v = st.number_input("Average fluid velocity (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-n = st.number_input("Power law index;dimensionless", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-mu = st.number_input("Flow consistency index (pa s^n)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-L_mm = st.number_input("Syringe tip length (mm)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
-A_mm2 = st.number_input("Cross sectional area of plunger stopper  (mm^2)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
-R_mm = st.number_input("Needle inner radius (mm)", min_value=0.0, step=0.001, value=1.5, format="%.3f")
-mu_oil = st.number_input("Silicone oil viscosity (pa s^n)", min_value=0.0, step=0.001, value=0.5, format="%.3f")
-r_b_mm = st.number_input("The syringe barrel radius (mm)", min_value=0.0, step=0.001, value=2.0, format="%.3f")
-l_stopper_mm = st.number_input("The length of the stopper in contact with glass (mm)", min_value=0.0, step=0.001, value=5.0, format="%.3f")
-d_oil_mm = st.number_input("The thickness of silicone oil (mm)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+col1, col2 = st.columns(2)
 
-# 计算并显示注射力
-st.header("计算结果")
-force = calculate_injection_force(V,v,n, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
-st.write(f"预测注射力为: {force:.2f} N")
+with col1:
+    # 用户输入参数
+    V = st.number_input("The injection rate (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+    v = st.number_input("Average fluid velocity (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+    n = st.number_input("Power law index;dimensionless", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+    mu = st.number_input("Flow consistency index (pa s^n)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+    L_mm = st.number_input("Syringe tip length (mm)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
+    A_mm2 = st.number_input("Cross sectional area of plunger stopper  (mm^2)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
+    R_mm = st.number_input("Needle inner radius (mm)", min_value=0.0, step=0.001, value=1.5, format="%.3f")
+    mu_oil = st.number_input("Silicone oil viscosity (pa s^n)", min_value=0.0, step=0.001, value=0.5, format="%.3f")
+    r_b_mm = st.number_input("The syringe barrel radius (mm)", min_value=0.0, step=0.001, value=2.0, format="%.3f")
+    l_stopper_mm = st.number_input("The length of the stopper in contact with glass (mm)", min_value=0.0, step=0.001, value=5.0, format="%.3f")
+    d_oil_mm = st.number_input("The thickness of silicone oil (mm)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
 
-# 数据模拟与绘图
-# 设置英文字体
-plt.rcParams['font.family'] = 'Arial'  # 或者 'Helvetica' 或其他英文字体
-plt.rcParams['font.size'] = 14
+    # 计算并显示注射力
+    st.header("计算结果")
+    force = calculate_injection_force(V, v, n, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
+    st.write(f"预测注射力为: {force:.2f} N")
 
-# 确保负号正常显示
-plt.rcParams['axes.unicode_minus'] = False
-
-# 数据模拟与绘图
-if st.checkbox("模拟不同粘度下的注射力"):
+with col2:
+    # 数据模拟与绘图
     st.header("Injection Force vs. Viscosity Simulation")
     
     # 用户选择粘度范围的开始和结束值
@@ -91,9 +87,6 @@ if st.checkbox("模拟不同粘度下的注射力"):
     if st.checkbox("Show Fitted Curve"):
         # 绘制拟合曲线
         plot_injection_force(mu_range, exponential_model(mu_range, *popt), title="Fitted Curve vs. Actual Measurements")
-
-st.sidebar.header("关于此应用")
-st.sidebar.info("此应用基于Wu等人2024年的研究，旨在帮助用户理解并预测预充式注射器中注射力与药物粘度之间的关系。输入相关参数，即可获得模拟的注射力数值及可视化结果。")
 
 # 结束
 st.write("希望此应用能为您的研究或产品设计带来便利！")
