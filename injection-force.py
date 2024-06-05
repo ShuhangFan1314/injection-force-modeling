@@ -5,19 +5,21 @@ import numpy as np
 import math
 
 # 定义注射力计算函数，这里仅作示意，具体公式请根据研究论文调整
-def calculate_injection_force(V, mu, L_mm, A_mm2, R_mm, mu_oil, r_b_mm, l_stopper_mm, d_oil_mm):
+def calculate_injection_force(V, v, n, mu, L_mm, A_mm2, R_mm, mu_oil, r_b_mm, l_stopper_mm, d_oil_mm):
     K1 = (8 * L_mm * A_mm2) / (math.pi * R_mm**4)
     K2 = (2 * math.pi * mu_oil * r_b_mm * l_stopper_mm) / d_oil_mm
+    gamma_eff = 2 * v / (R_mm * (2*n + 1) / (3*n + 1))  # 有效剪切速率计算
+    mu_eff = K1 * gamma_eff**(n - 1)  # 有效粘度计算
     f_friction = K2 * V
-    F_injection = K1 * V * mu + f_friction
+    F_injection = mu_eff * mu + f_friction
     return F_injection
 
 def plot_injection_force(mu_values, force_values, title="注射力与粘度关系"):
     plt.figure(figsize=(10, 6))
     plt.plot(mu_values, force_values, 'bo-', label='实际测量值')
     plt.title(title)
-    plt.xlabel('流体粘度 (cP)')
-    plt.ylabel('注射力 (N)')
+    plt.xlabel('fluid viscosity (cP)')
+    plt.ylabel('Injection force (N)')
     plt.legend()
     st.pyplot(plt)
     plt.close()
@@ -36,15 +38,17 @@ st.write("[Wu, Linke et al. [Advancing injection force modeling and viscosity-de
 
 # 用户输入
 st.header("输入以下参数以计算注射力:")
-V = st.number_input("注射速率 (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-mu = st.number_input("流体粘度 (cP)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
-L_mm = st.number_input("针尖长度 (mm)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
-A_mm2 = st.number_input("柱塞塞子横截面积 (mm^2)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
-R_mm = st.number_input("针内半径 (mm)", min_value=0.0, step=0.001, value=1.5, format="%.3f")
-mu_oil = st.number_input("硅油粘度 (cP)", min_value=0.0, step=0.001, value=0.5, format="%.3f")
-r_b_mm = st.number_input("注射器筒身半径 (mm)", min_value=0.0, step=0.001, value=2.0, format="%.3f")
-l_stopper_mm = st.number_input("柱塞接触长度 (mm)", min_value=0.0, step=0.001, value=5.0, format="%.3f")
-d_oil_mm = st.number_input("硅油层厚度 (mm)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+V = st.number_input("The injection rate (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+v = st.number_input("Average fluid velocity (m/s)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+n = st.number_input("Power law index;dimensionless", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+mu = st.number_input("Flow consistency index (pa s^n)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
+L_mm = st.number_input("Syringe tip length (mm)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
+A_mm2 = st.number_input("Cross sectional area of plunger stopper  (mm^2)", min_value=0.0, step=0.001, value=1.0, format="%.3f")
+R_mm = st.number_input("Needle inner radius (mm)", min_value=0.0, step=0.001, value=1.5, format="%.3f")
+mu_oil = st.number_input("Silicone oil viscosity (pa s^n)", min_value=0.0, step=0.001, value=0.5, format="%.3f")
+r_b_mm = st.number_input("The syringe barrel radius (mm)", min_value=0.0, step=0.001, value=2.0, format="%.3f")
+l_stopper_mm = st.number_input("The length of the stopper in contact with glass (mm)", min_value=0.0, step=0.001, value=5.0, format="%.3f")
+d_oil_mm = st.number_input("The thickness of silicone oil (mm)", min_value=0.0, step=0.001, value=0.1, format="%.3f")
 
 # 计算并显示注射力
 st.header("计算结果")
