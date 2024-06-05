@@ -59,6 +59,9 @@ with col1:
     force = calculate_injection_force(V, v, n, mu, L_mm/1000, A_mm2/1000000, R_mm/1000, mu_oil, r_b_mm/1000, l_stopper_mm/1000, d_oil_mm/1000)  # 注意单位转换
     st.write(f"预测注射力为: {force:.2f} N")
 
+# 添加一些空白空间
+st.spacer()
+
 with col2:
     # 数据模拟与绘图
     st.header("Injection Force vs. Viscosity Simulation")
