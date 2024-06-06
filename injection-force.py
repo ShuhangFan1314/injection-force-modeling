@@ -6,7 +6,7 @@ import math
 
 # 定义注射力计算函数，这里仅作示意，具体公式请根据研究论文调整
 def calculate_injection_force(V, v, n, mu, L_mm, A_mm2, R_mm, mu_oil, r_b_mm, l_stopper_mm, d_oil_mm):
-    K1 = (8 * L_mm * A_mm2 * A_mm2) / (math.pi * R_mm**4)
+    K1 = (8 * L_mm * A_mm2**2) / (math.pi * R_mm**4)
     K2 = (2 * math.pi * mu_oil * r_b_mm * l_stopper_mm) / d_oil_mm
     gamma_eff = 2 * v / (R_mm * (2*n + 1) / (3*n + 1))  # 有效剪切速率计算
     mu_eff = K1 * gamma_eff**(n - 1)  # 有效粘度计算
